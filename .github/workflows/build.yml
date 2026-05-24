@@ -1,0 +1,55 @@
+name: Build BERSAHAJA Android
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core @capacitor/android @capacitor/filesystem
+          npm install -g @capacitor/cli
+
+      - name: Prepare www folder
+        run: |
+          mkdir -p www
+          cp *.html www/
+          cp *.css www/
+
+      - name: Capacitor add android
+        run: npx cap add android || true
+
+      - name: Capacitor sync
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: BERSAHAJA-Android-APK
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 30
