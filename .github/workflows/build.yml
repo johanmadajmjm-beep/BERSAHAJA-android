@@ -40,6 +40,44 @@ jobs:
           cp *.css www/
           cp login.html www/
 
+          # Fix PDF untuk Android di oddp dan caregiver
+          for f in www/oddp_easy.html www/caregiver_easy.html; do
+            python3 - "$f" << 'PYEOF'
+import sys
+with open(sys.argv[1], 'r', encoding='utf-8') as f:
+    c = f.read()
+
+old1 = "  const w=window.open('','_blank');"
+new1 = "  const _isAndroid=/Android/i.test(navigator.userAgent);\n  const w=_isAndroid?null:window.open('','_blank');"
+c = c.replace(old1, new1, 1)
+
+old2 = "  w.document.write(html);\n  w.document.close();\n  showToast('\u2705 Laporan profesional disiapkan!');"
+new2 = """  if(_isAndroid){
+    const ov=document.createElement('div');
+    ov.id='__rpt__';
+    ov.style.cssText='position:fixed;inset:0;background:#f8f9fc;z-index:999999;overflow-y:auto;';
+    const tb=document.createElement('div');
+    tb.style.cssText='position:sticky;top:0;background:#1e3a8a;padding:10px 16px;display:flex;gap:10px;align-items:center;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.3);';
+    tb.innerHTML='<button onclick="document.getElementById(\\'__rpt__\\').remove()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">&#8592; Kembali</button><button onclick="window.print()" style="background:#10b981;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">&#128190; Simpan PDF</button><span style="color:rgba(255,255,255,.7);font-size:11px;flex:1;text-align:right;">Pilih Save as PDF saat print</span>';
+    const ct=document.createElement('div');
+    ct.innerHTML=html;
+    ov.appendChild(tb);
+    ov.appendChild(ct);
+    document.body.appendChild(ov);
+  } else {
+    w.document.write(html);
+    w.document.close();
+  }
+  showToast('\u2705 Laporan profesional disiapkan!');"""
+
+c = c.replace(old2, new2, 1)
+
+with open(sys.argv[1], 'w', encoding='utf-8') as f:
+    f.write(c)
+print("Done:", sys.argv[1])
+PYEOF
+          done
+
           cat > www/android.css << 'ANDROIDCSS'
           @media (max-width: 900px) {
             .nav {
