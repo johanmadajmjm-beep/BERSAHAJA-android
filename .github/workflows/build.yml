@@ -39,11 +39,37 @@ jobs:
           cp oddp_easy.html www/oddp_easy.html
           cp *.css www/
 
+          # Inject CSS fix untuk Android ke setiap file HTML
+          for f in www/*.html; do
+            sed -i 's|</head>|<style>\
+            /* ANDROID FIX */\
+            .nav-links{display:flex !important}\
+            .nav-link{font-size:10px !important;padding:5px 8px !important}\
+            .sidebar{\
+              position:relative !important;\
+              max-height:none !important;\
+              height:auto !important;\
+              width:100% !important;\
+              overflow:visible !important;\
+              padding:12px !important;\
+            }\
+            .sidebar.open{max-height:none !important}\
+            .layout{margin-left:0 !important;padding-top:var(--nav-h) !important}\
+            .kpi-strip{position:relative !important;left:0 !important;width:100% !important}\
+            #mobileFilterBtn{display:none !important}\
+            </style></head>|g' "$f"
+          done
+
       - name: Capacitor add android
         run: npx cap add android || true
 
       - name: Capacitor sync
         run: npx cap sync android
+
+      - name: Set portrait and landscape orientation
+        run: |
+          sed -i 's/android:screenOrientation="portrait"/android:screenOrientation="fullSensor"/g' \
+            android/app/src/main/AndroidManifest.xml || true
 
       - name: Build APK
         working-directory: android
