@@ -114,6 +114,10 @@ jobs:
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/oddp_easy.html
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/caregiver_easy.html
 
+          for f in www/oddp_easy.html www/caregiver_easy.html; do
+            sed -i 's|</body>|<script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".sb-body").forEach(function(el){el.style.maxHeight="0";el.style.overflow="hidden";});document.querySelectorAll(".sb-chv").forEach(function(el){el.classList.remove("open");});});</script></body>|g' "$f"
+          done
+
           cat > www/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
