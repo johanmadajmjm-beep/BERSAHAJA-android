@@ -49,10 +49,7 @@ jobs:
               gap: 4px !important;
               position: fixed !important;
             }
-            .nav-brand {
-              flex: 0 0 auto !important;
-              margin-right: auto !important;
-            }
+            .nav-brand { flex: 0 0 auto !important; margin-right: auto !important; }
             .nav-links {
               display: flex !important;
               flex: 0 0 100% !important;
@@ -89,10 +86,7 @@ jobs:
               width: 100% !important;
               margin-top: 120px !important;
             }
-            .layout {
-              margin-left: 0 !important;
-              padding-top: 0 !important;
-            }
+            .layout { margin-left: 0 !important; padding-top: 0 !important; }
             .sidebar {
               position: relative !important;
               top: auto !important;
@@ -137,10 +131,10 @@ jobs:
           sed -i 's/android:screenOrientation="portrait"/android:screenOrientation="fullSensor"/g' \
             android/app/src/main/AndroidManifest.xml || true
 
-      - name: Allow external network Google Script
+      - name: Network security config
         run: |
           mkdir -p android/app/src/main/res/xml
-          cat > android/app/src/main/res/xml/network_security_config.xml << 'EOF'
+          cat > android/app/src/main/res/xml/network_security_config.xml << 'NETEOF'
           <?xml version="1.0" encoding="utf-8"?>
           <network-security-config>
             <base-config cleartextTrafficPermitted="true">
@@ -155,7 +149,7 @@ jobs:
               <domain includeSubdomains="true">google.com</domain>
             </domain-config>
           </network-security-config>
-          EOF
+          NETEOF
           sed -i 's|android:label="BERSAHAJA"|android:label="BERSAHAJA" android:networkSecurityConfig="@xml/network_security_config"|g' \
             android/app/src/main/AndroidManifest.xml || true
 
