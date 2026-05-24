@@ -6,38 +6,10 @@
 <title>BERSAHAJA — Login</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:'Inter',system-ui,sans-serif;
-    background:#070e1b;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-  }
-  .card{
-    background:#0c1625;
-    border:1px solid #1b2e4a;
-    border-radius:20px;
-    padding:36px 32px;
-    width:100%;
-    max-width:380px;
-    box-shadow:0 8px 40px rgba(0,0,0,0.5);
-  }
-  .logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:28px;
-    justify-content:center;
-  }
-  .logo-icon{
-    width:44px;height:44px;
-    background:linear-gradient(135deg,#3b82f6,#8b5cf6);
-    border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:22px;
-  }
+  body{font-family:'Inter',system-ui,sans-serif;background:#070e1b;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{background:#0c1625;border:1px solid #1b2e4a;border-radius:20px;padding:36px 32px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+  .logo{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
+  .logo-icon{width:44px;height:44px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
   .logo-text{font-size:20px;font-weight:700;color:#fff}
   .logo-sub{font-size:10px;color:#3a5575;margin-top:2px}
   h2{font-size:15px;font-weight:600;color:#dde8f8;text-align:center;margin-bottom:6px}
@@ -46,7 +18,7 @@
   label{display:block;font-size:10px;font-weight:600;color:#3a5575;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
   input{width:100%;background:#111e33;border:1px solid #1b2e4a;color:#dde8f8;font-size:13px;font-family:inherit;padding:10px 14px;border-radius:9px;outline:none;transition:.15s}
   input:focus{border-color:#3b82f6}
-  .btn{width:100%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;padding:12px;border-radius:10px;cursor:pointer;margin-top:6px;transition:.15s}
+  .btn{width:100%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;padding:12px;border-radius:10px;cursor:pointer;margin-top:6px}
   .btn:disabled{opacity:.6;cursor:wait}
   .msg{margin-top:14px;font-size:11px;text-align:center;padding:8px 12px;border-radius:8px;display:none}
   .msg.error{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:#f87171;display:block}
@@ -79,7 +51,17 @@
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbwN3qNaPVm3kELGepBbCPSsvQZkJp57xxeE6aOk9d3SRPLHMKPxFErsUdZBTxu5Z53xiA/exec';
+// ═══════════════════════════════════════
+// DATABASE USER — edit di sini untuk
+// tambah/ubah/hapus user dan password
+// Format: {u:'username', p:'password', exp:'YYYY-MM-DD', aktif:true}
+// ═══════════════════════════════════════
+const USERS = [
+  {u:'Ayoindo', p:'Ayo2026',    exp:'2026-12-31', aktif:true},
+  {u:'Johan',        p:'Admin2026',  exp:'2026-12-31', aktif:true},
+  {u:'Jeri',        p:'User26',   exp:'2026-06-31', aktif:true},
+  {u:'Boy',        p:'User27',  exp:'2026-06-31', aktif:true},
+];
 
 window.onload = function(){
   if(sessionStorage.getItem('bersahaja_auth') === 'ok'){
@@ -105,57 +87,43 @@ function doLogin(){
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
   btn.textContent = 'Memeriksa...';
-  showMsg('', '');
 
-  // Gunakan XMLHttpRequest — lebih kompatibel dengan Android WebView
-  const xhr = new XMLHttpRequest();
-  const url = API_URL + '?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
-  
-  xhr.open('GET', url, true);
-  xhr.timeout = 15000;
-  
-  xhr.onreadystatechange = function(){
-    if(xhr.readyState === 4){
-      if(xhr.status === 200){
-        try {
-          const data = JSON.parse(xhr.responseText);
-          if(data.status === 'ok'){
-            showMsg('✅ Login berhasil! Mengalihkan...', 'success');
-            sessionStorage.setItem('bersahaja_auth', 'ok');
-            sessionStorage.setItem('bersahaja_user', username);
-            setTimeout(function(){ window.location.href = 'index_easy.html'; }, 800);
-          } else {
-            showMsg('❌ ' + data.message, 'error');
-            btn.disabled = false;
-            btn.textContent = 'Masuk';
-          }
-        } catch(e) {
-          showMsg('❌ Respons server tidak valid', 'error');
-          btn.disabled = false;
-          btn.textContent = 'Masuk';
-        }
-      } else {
-        showMsg('❌ Server error: ' + xhr.status, 'error');
-        btn.disabled = false;
-        btn.textContent = 'Masuk';
-      }
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const user = USERS.find(function(u){
+    return u.u === username && u.p === password;
+  });
+
+  setTimeout(function(){
+    if(!user){
+      showMsg('❌ Username atau password salah', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Masuk';
+      return;
     }
-  };
 
-  xhr.ontimeout = function(){
-    showMsg('❌ Koneksi timeout. Periksa internet.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Masuk';
-  };
+    if(!user.aktif){
+      showMsg('❌ Akun tidak aktif. Hubungi admin.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Masuk';
+      return;
+    }
 
-  xhr.onerror = function(){
-    // Fallback: coba dengan mode no-cors via image trick
-    showMsg('⚠️ Mencoba koneksi alternatif...', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Masuk';
-  };
+    const exp = new Date(user.exp);
+    exp.setHours(0,0,0,0);
+    if(exp < today){
+      showMsg('❌ Password sudah expired. Hubungi admin.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Masuk';
+      return;
+    }
 
-  xhr.send();
+    showMsg('✅ Login berhasil! Mengalihkan...', 'success');
+    sessionStorage.setItem('bersahaja_auth', 'ok');
+    sessionStorage.setItem('bersahaja_user', username);
+    setTimeout(function(){ window.location.href = 'index_easy.html'; }, 800);
+  }, 800);
 }
 
 document.addEventListener('keydown', function(e){
