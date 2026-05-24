@@ -34,115 +34,108 @@ jobs:
       - name: Prepare www folder
         run: |
           mkdir -p www
-          cp index_easy.html www/index.html
-          cp caregiver_easy.html www/caregiver_easy.html
-          cp oddp_easy.html www/oddp_easy.html
+          cp index_easy.html www/
+          cp caregiver_easy.html www/
+          cp oddp_easy.html www/
           cp *.css www/
 
-          for f in www/*.html; do
-            sed -i 's|</head>|<style>\
-            /* ═══════════════════════════\
-               ANDROID PORTRAIT FIX\
-            ═══════════════════════════ */\
-            \
-            /* NAV — 2 baris di portrait */\
-            @media(max-width:768px){\
-              .nav{\
-                height:auto !important;\
-                flex-wrap:wrap !important;\
-                padding:8px 12px !important;\
-                gap:6px !important;\
-                row-gap:6px !important;\
-              }\
-              .nav-brand{\
-                flex:0 0 auto !important;\
-                margin-right:auto !important;\
-              }\
-              .nav-brand-text{font-size:13px !important}\
-              .nav-links{\
-                display:flex !important;\
-                flex:0 0 100% !important;\
-                order:3 !important;\
-                gap:4px !important;\
-                flex-wrap:nowrap !important;\
-                overflow-x:auto !important;\
-                padding-bottom:2px !important;\
-              }\
-              .nav-link{\
-                font-size:10px !important;\
-                padding:5px 10px !important;\
-                white-space:nowrap !important;\
-                flex-shrink:0 !important;\
-              }\
-              .nav-right{\
-                flex:0 0 100% !important;\
-                order:4 !important;\
-                flex-wrap:nowrap !important;\
-                overflow-x:auto !important;\
-                gap:4px !important;\
-                margin-left:0 !important;\
-              }\
-              .nav-btn{\
-                font-size:9px !important;\
-                padding:5px 8px !important;\
-                white-space:nowrap !important;\
-                flex-shrink:0 !important;\
-              }\
-              /* Layout fix */\
-              .layout{\
-                margin-left:0 !important;\
-                padding-top:110px !important;\
-              }\
-              .kpi-strip{\
-                position:fixed !important;\
-                top:110px !important;\
-                left:0 !important;\
-                width:100% !important;\
-              }\
-              .kpi-grid{grid-template-columns:1fr 1fr !important}\
-              /* Sidebar collapse */\
-              .sidebar{\
-                position:relative !important;\
-                width:100% !important;\
-                height:auto !important;\
-                max-height:0 !important;\
-                overflow:hidden !important;\
-                padding:0 12px !important;\
-                transition:max-height .3s ease !important;\
-              }\
-              .sidebar.open{\
-                max-height:90vh !important;\
-                padding:12px !important;\
-                overflow-y:auto !important;\
-              }\
-              #mobileFilterBtn{\
-                display:block !important;\
-                position:relative !important;\
-                top:auto !important;\
-                left:auto !important;\
-                margin:6px 0 !important;\
-                width:100% !important;\
-                text-align:center !important;\
-              }\
-              /* Hapus tumpang tindih */\
-              .two-col{grid-template-columns:1fr !important}\
-              .three-col{grid-template-columns:1fr !important}\
-            }\
-            </style>\
-            <script>\
-            document.addEventListener("DOMContentLoaded", function(){\
-              var sb = document.querySelector(".sidebar");\
-              if(sb) sb.classList.remove("open");\
-              var btn = document.getElementById("mobileFilterBtn");\
-              if(btn && sb){\
-                btn.addEventListener("click", function(){\
-                  sb.classList.toggle("open");\
-                  btn.textContent = sb.classList.contains("open") ? "▲ Tutup Filter" : "▼ Buka Filter";\
-                });\
-              }\
-            });\
-            </script>|g' "$f"
-          done
+          # Buat file CSS khusus Android
+          cat > www/android.css << 'ANDROIDCSS'
+          @media (max-width: 900px) {
+            /* NAV — wrap jadi 2 baris */
+            .nav {
+              height: auto !important;
+              flex-wrap: wrap !important;
+              padding: 8px 12px !important;
+              gap: 4px !important;
+              position: fixed !important;
+            }
+            .nav-brand {
+              flex: 0 0 auto !important;
+              margin-right: auto !important;
+            }
+            .nav-links {
+              display: flex !important;
+              flex: 0 0 100% !important;
+              order: 3 !important;
+              overflow-x: auto !important;
+              gap: 4px !important;
+              padding-bottom: 2px !important;
+              -webkit-overflow-scrolling: touch !important;
+            }
+            .nav-link {
+              font-size: 10px !important;
+              padding: 5px 8px !important;
+              white-space: nowrap !important;
+              flex-shrink: 0 !important;
+            }
+            .nav-right {
+              flex: 0 0 100% !important;
+              order: 4 !important;
+              overflow-x: auto !important;
+              gap: 4px !important;
+              margin-left: 0 !important;
+              -webkit-overflow-scrolling: touch !important;
+            }
+            .nav-btn {
+              font-size: 9px !important;
+              padding: 5px 8px !important;
+              white-space: nowrap !important;
+              flex-shrink: 0 !important;
+            }
+            /* KPI strip dan layout — tidak tumpang tindih */
+            .kpi-strip {
+              position: relative !important;
+              top: auto !important;
+              left: 0 !important;
+              width: 100% !important;
+            }
+            .layout {
+              margin-left: 0 !important;
+              padding-top: 0 !important;
+            }
+            /* Sidebar collapse by default */
+            .sidebar {
+              position: relative !important;
+              top: auto !important;
+              left: auto !important;
+              width: 100% !important;
+              height: auto !important;
+              max-height: 0 !important;
+              overflow: hidden !important;
+              padding: 0 12px !important;
+              transition: max-height 0.3s ease !important;
+            }
+            .sidebar.open {
+              max-height: 90vh !important;
+              padding: 12px !important;
+              overflow-y: auto !important;
+            }
+            #mobileFilterBtn {
+              display: block !important;
+            }
+            .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+            .two-col { grid-template-columns: 1fr !important; }
+            .three-col { grid-template-columns: 1fr !important; }
+          }
+          ANDROIDCSS
+
+          # Inject link android.css ke semua HTML
+          sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/index_easy.html
+          sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/oddp_easy.html
+          sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/caregiver_easy.html
+
+          # Buat index.html redirect
+          cat > www/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta http-equiv="refresh" content="0;url=index_easy.html">
+            <script>window.location.href='index_easy.html';</script>
+          </head>
+          <body></body>
+          </html>
+          EOF
 
       - name: Capacitor add android
         run: npx cap add android || true
