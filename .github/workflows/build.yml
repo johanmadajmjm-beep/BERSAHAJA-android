@@ -115,7 +115,7 @@ jobs:
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/oddp_easy.html
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/caregiver_easy.html
 
-         cat > www/index.html << 'EOF'
+          cat > www/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
           <head>
