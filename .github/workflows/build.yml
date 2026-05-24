@@ -34,7 +34,9 @@ jobs:
       - name: Prepare www folder
         run: |
           mkdir -p www
-          cp *.html www/
+          cp index_easy.html www/index.html
+          cp caregiver_easy.html www/caregiver_easy.html
+          cp oddp_easy.html www/oddp_easy.html
           cp *.css www/
 
       - name: Capacitor add android
