@@ -3,10 +3,17 @@
   "appName": "BERSAHAJA",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "cleartext": true
   },
   "android": {
     "allowMixedContent": true,
-    "backgroundColor": "#070e1b"
+    "backgroundColor": "#070e1b",
+    "allowNavigation": [
+      "*.google.com",
+      "*.googleapis.com",
+      "script.google.com",
+      "script.googleusercontent.com"
+    ]
   }
 }
