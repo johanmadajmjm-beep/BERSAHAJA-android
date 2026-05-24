@@ -1208,5 +1208,16 @@ function initDashboard(){
 }
 checkMobile();updateHeights();
 </script>
+  <script>
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll(".sb-body").forEach(function(el){
+    el.style.maxHeight="0";
+    el.style.overflow="hidden";
+  });
+  document.querySelectorAll(".sb-chv").forEach(function(el){
+    el.classList.remove("open");
+  });
+});
+</script>
 </body>
 </html>
