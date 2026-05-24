@@ -811,9 +811,17 @@ function hapusSemuaData(){
   const inp=document.getElementById('xlsInput');if(inp)inp.value='';
   showToast('✅ Data berhasil dihapus — dashboard dikosongkan');
 }
-
+function isAndroid(){ return /Android/i.test(navigator.userAgent); }
 function downloadPDF(){
   if(!RAW.length){showToast('⚠️ Belum ada data');return;}
+  if(isAndroid()){
+  const w=window.open('','_blank');
+  if(w){ 
+    w.document.write('<p style="font-family:sans-serif;padding:20px">Membuka laporan... Gunakan menu browser <b>⋮ → Print → Save as PDF</b></p>');
+  }
+  setTimeout(function(){ if(w) w.print(); }, 500);
+  return;
+}
   generateAllCaregiverAnalysis(false);
   const w=window.open('','_blank');
   const data=getFiltered();
