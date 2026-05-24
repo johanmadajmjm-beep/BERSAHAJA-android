@@ -141,7 +141,6 @@
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbwN3qNaPVm3kELGepBbCPSsvQZkJp57xxeE6aOk9d3SRPLHMKPxFErsUdZBTxu5Z53xiA/exec';
 
-// Cek apakah sudah login
 window.onload = function(){
   if(sessionStorage.getItem('bersahaja_auth') === 'ok'){
     window.location.href = 'index_easy.html';
@@ -169,10 +168,10 @@ async function doLogin(){
   showMsg('', '');
 
   try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username, password})
+    const url = API_URL + '?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
+    const res = await fetch(url, {
+      method: 'GET',
+      mode: 'cors'
     });
     const data = await res.json();
 
@@ -193,7 +192,6 @@ async function doLogin(){
   }
 }
 
-// Enter key
 document.addEventListener('keydown', function(e){
   if(e.key === 'Enter') doLogin();
 });
