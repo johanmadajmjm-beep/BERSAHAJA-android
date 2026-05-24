@@ -39,10 +39,8 @@ jobs:
           cp oddp_easy.html www/
           cp *.css www/
 
-          # Buat file CSS khusus Android
           cat > www/android.css << 'ANDROIDCSS'
           @media (max-width: 900px) {
-            /* NAV — wrap jadi 2 baris */
             .nav {
               height: auto !important;
               flex-wrap: wrap !important;
@@ -83,49 +81,39 @@ jobs:
               white-space: nowrap !important;
               flex-shrink: 0 !important;
             }
-            /* KPI strip dan layout — tidak tumpang tindih */
             .kpi-strip {
               position: relative !important;
               top: auto !important;
               left: 0 !important;
               width: 100% !important;
+              margin-top: 120px !important;
             }
             .layout {
               margin-left: 0 !important;
               padding-top: 0 !important;
             }
-            /* Sidebar collapse by default */
             .sidebar {
               position: relative !important;
               top: auto !important;
               left: auto !important;
               width: 100% !important;
               height: auto !important;
-              max-height: 0 !important;
-              overflow: hidden !important;
-              padding: 0 12px !important;
-              transition: max-height 0.3s ease !important;
-            }
-            .sidebar.open {
-              max-height: 90vh !important;
+              max-height: none !important;
+              overflow: visible !important;
               padding: 12px !important;
-              overflow-y: auto !important;
+              display: flex !important;
             }
-            #mobileFilterBtn {
-              display: block !important;
-            }
+            #mobileFilterBtn { display: none !important; }
             .kpi-grid { grid-template-columns: 1fr 1fr !important; }
             .two-col { grid-template-columns: 1fr !important; }
             .three-col { grid-template-columns: 1fr !important; }
           }
           ANDROIDCSS
 
-          # Inject link android.css ke semua HTML
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/index_easy.html
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/oddp_easy.html
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/caregiver_easy.html
 
-          # Buat index.html redirect
           cat > www/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
