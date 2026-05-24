@@ -38,6 +38,7 @@ jobs:
           cp caregiver_easy.html www/
           cp oddp_easy.html www/
           cp *.css www/
+          cp login.html www/
 
           cat > www/android.css << 'ANDROIDCSS'
           @media (max-width: 900px) {
@@ -114,12 +115,12 @@ jobs:
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/oddp_easy.html
           sed -i 's|</head>|<link rel="stylesheet" href="android.css"></head>|g' www/caregiver_easy.html
 
-          cat > www/index.html << 'EOF'
+         cat > www/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
           <head>
-            <meta http-equiv="refresh" content="0;url=index_easy.html">
-            <script>window.location.href='index_easy.html';</script>
+            <meta http-equiv="refresh" content="0;url=login.html">
+            <script>window.location.href='login.html';</script>
           </head>
           <body></body>
           </html>
