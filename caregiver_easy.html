@@ -227,7 +227,7 @@ function loadExcelFile(file){
       RAW_ORIG=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!RAW_ORIG.length){showToast('⚠️ File Excel kosong');return;}
       EXCEL_COLS=Object.keys(RAW_ORIG[0]);
-      const savedMap=sessionStorage.getItem(FMAP_KEY);
+      const savedMap=localStorage.getItem(FMAP_KEY);
       if(savedMap){
         try{const m=JSON.parse(savedMap);const valid=Object.values(m).every(v=>!v||EXCEL_COLS.includes(v));if(valid){FMAP=m;applyMappingAndRender(file.name);return;}}catch(e2){}
       }
