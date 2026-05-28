@@ -391,7 +391,7 @@ function applyColMap(){
     return;
   }
   closeColMap();
-  try{sessionStorage.setItem(FMAP_KEY,JSON.stringify(FMAP));}catch(e){}
+  try{localStorage.setItem(FMAP_KEY,JSON.stringify(FMAP));}catch(e){}
   applyMappingAndRender('');
 }
 
@@ -507,7 +507,7 @@ function applyMappingAndRender(fname){
     return mapped;
   }).filter(r=>r._nama);
   
-  try{sessionStorage.setItem(CACHE_KEY,JSON.stringify(RAW));}catch(e){}
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(RAW));}catch(e){}
   
   const lbl=document.getElementById('xlsLabel');
   if(lbl){lbl.style.background='rgba(16,185,129,.15)';lbl.style.color='#34d399';lbl.style.borderColor='rgba(16,185,129,.3)';}
@@ -519,8 +519,8 @@ function applyMappingAndRender(fname){
 /* Try cache on load */
 (function tryCache(){
   try{
-    const cm=sessionStorage.getItem(FMAP_KEY);
-    const cd=sessionStorage.getItem(CACHE_KEY);
+    const cm=localStorage.getItem(FMAP_KEY);
+    const cd=localStorage.getItem(CACHE_KEY);
     if(cm&&cd){
       FMAP=JSON.parse(cm);
       RAW=JSON.parse(cd);
@@ -932,7 +932,7 @@ function hapusSemuaData(){
   FMAP={colNama:'',colKab:'',colKec:'',colPK:'',colDesa:'',colJK:'',colBulan:'',colTahun:'',colKuartal:'',colBulanLabel:'',colADL:'',colPeng:'',colSosial:'',colKom:'',colProd:'',colKetADL:'',colKetPeng:'',colKetSosial:'',colKetKom:'',colKetProd:''};
   ALL={}; SEL={tl:new Set(),kab:new Set(),kec:new Set(),pk:new Set(),desa:new Set(),nama:new Set()};
   bulanLabel={};
-  try{sessionStorage.removeItem(CACHE_KEY);sessionStorage.removeItem(FMAP_KEY);}catch(e){}
+  try{localStorage.removeItem(CACHE_KEY);localStorage.removeItem(FMAP_KEY);}catch(e){}
   // Reset UI
   document.getElementById('dataBadge').textContent='Belum ada data';
   const lbl=document.getElementById('xlsLabel');
