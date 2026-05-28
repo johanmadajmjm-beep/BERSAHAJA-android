@@ -320,7 +320,7 @@ function applyColMap(){
   const missing=COL_DEFS.filter(cd=>cd.required&&!FMAP[cd.key]);
   if(missing.length){showToast('⚠️ Pilih kolom wajib: '+missing.map(c=>c.lbl).join(', '));return;}
   closeColMap();
-  try{sessionStorage.setItem(FMAP_KEY,JSON.stringify(FMAP));}catch(e){}
+  try{localStorage.setItem(FMAP_KEY,JSON.stringify(FMAP));}catch(e){}
   applyMappingAndRender('');
 }
 
@@ -438,7 +438,7 @@ function applyMappingAndRender(fname){
 /* Try cache */
 (function tryCache(){
   try{
-    const cm=sessionStorage.getItem(FMAP_KEY);
+    const cm=localStorage.getItem(FMAP_KEY);
     const cd=localStorage.getItem(CACHE_KEY); // localStorage untuk data besar
     if(cm&&cd){
       FMAP=JSON.parse(cm);
@@ -798,7 +798,7 @@ function hapusSemuaData(){
   FMAP={colNama:'',colNamaPendampingan:'',colKab:'',colKec:'',colPK:'',colDesa:'',colJK:'',colBulan:'',colTahun:'',colKuartal:'',colBulanLabel:'',colFisik:'',colPP:'',colPPDPRK:'',colADL:'',colAdvokasi:'',colKetFisik:'',colKetPP:'',colKetPPDPRK:'',colKetADL:'',colKetAdvokasi:''};
   ALL={}; SEL={tl:new Set(),kab:new Set(),kec:new Set(),pk:new Set(),desa:new Set(),nama:new Set()};
   bulanLabel={};
-  try{sessionStorage.removeItem(FMAP_KEY);localStorage.removeItem(CACHE_KEY);}catch(e){}
+  try{localStorage.removeItem(FMAP_KEY);localStorage.removeItem(CACHE_KEY);}catch(e){}
   document.getElementById('dataBadge').textContent='Belum ada data';
   const lbl=document.getElementById('xlsLabel');
   if(lbl){lbl.style.background='rgba(16,185,129,.15)';lbl.style.color='#34d399';lbl.style.borderColor='rgba(16,185,129,.3)';}
