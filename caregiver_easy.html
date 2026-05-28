@@ -427,7 +427,7 @@ function applyMappingAndRender(fname){
     mapped.bulan=mapped._bulan;mapped.tahun=mapped._tahun;mapped.kuartal=mapped._kuartal;
     return mapped;
   }).filter(r=>r._nama);
-  try{localStorage.setItem(CACHE_KEY,JSON.stringify(RAW));}catch(e){}
+  try{   const dataStr=JSON.stringify(RAW);   const sizeMB=(dataStr.length/1024/1024).toFixed(2);   localStorage.setItem(CACHE_KEY,dataStr);   showToast('✅ Data tersimpan: '+RAW.length+' baris ('+sizeMB+' MB)'); }catch(e){   showToast('⚠️ Data terlalu besar untuk disimpan (>5MB). Coba kurangi data Excel.');   console.error('localStorage error:',e); }
   // badge disembunyikan
   const lbl=document.getElementById('xlsLabel');
   if(lbl){lbl.style.background='rgba(16,185,129,.25)';lbl.style.color='#34d399';lbl.style.borderColor='rgba(16,185,129,.5)';}
