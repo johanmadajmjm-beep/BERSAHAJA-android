@@ -59,7 +59,7 @@ const USERS = [
 ];
 
 window.onload = function(){
-  if(sessionStorage.getItem('bersahaja_auth') === 'ok'){
+  if(localStorage.getItem('bersahaja_auth') === 'ok'){
     window.location.href = 'index_easy.html';
   }
 }
@@ -116,8 +116,8 @@ function doLogin(){
       return;
     }
     showMsg('Login berhasil! Mengalihkan...', 'success');
-    sessionStorage.setItem('bersahaja_auth', 'ok');
-    sessionStorage.setItem('bersahaja_user', username);
+    localStorage.setItem('bersahaja_auth', 'ok');
+    localStorage.setItem('bersahaja_user', username);
     setTimeout(function(){ window.location.href = 'index_easy.html'; }, 800);
   }, 800);
 }
