@@ -266,7 +266,7 @@ function loadExcelFile(file){
       if(!RAW_ORIG.length){showToast('⚠️ File Excel kosong');return;}
       EXCEL_COLS=Object.keys(RAW_ORIG[0]);
       // Coba load saved mapping
-      const savedMap=sessionStorage.getItem(FMAP_KEY);
+      const savedMap=localStorage.getItem(FMAP_KEY);
       if(savedMap){
         try{
           const m=JSON.parse(savedMap);
